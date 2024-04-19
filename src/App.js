@@ -43,6 +43,10 @@ function App() {
         setTasks((newTasks));
     }
 
+    function handleDeleteTask (id) {
+        setTasks(tasks.filter(task => task.id !== id))
+    }
+
     return (
         <div className="App">
             <h1>todos</h1>
@@ -53,7 +57,10 @@ function App() {
                     <li key={id} className='todo-item'>
                         <span className={status ? 'status done' : 'status active'}
                               onClick={() => handleChangeStatus(id)}/>
-                        {name}</li>))}
+                        {name}
+                        <button onClick={() => handleDeleteTask(id)}>X</button>
+                    </li>
+                ))}
             </ul>
         </div>
 
