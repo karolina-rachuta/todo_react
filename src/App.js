@@ -11,6 +11,7 @@ import TaskList from './components/TaskList';
 function App() {
     const [value, setValue] = useState('');
     const [tasks, setTasks] = useState([]);
+    const [selection, setSelection] = useState('all');
 
     useEffect(() => {
         setTasks(loadFromLocalStorage('tds'));
@@ -63,7 +64,13 @@ function App() {
             tasks={tasks}
             handleChangeStatus={handleChangeStatus}
             handleDeleteTask={handleDeleteTask}
+            selection={selection}
             />
+            <div>
+                <button onClick={()=> setSelection('all')}>All</button>
+                <button onClick={()=> setSelection(false)}>Active</button>
+                <button onClick={()=> setSelection(true)}>Completed</button>
+            </div>
         </div>
     );
 }
