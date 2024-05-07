@@ -25,6 +25,7 @@ const saveToLocalStorage = (key, data) => {
 localStorage.setItem(key, JSON.stringify(data))
 }
 
+
 function App() {
     const [value, setValue] = useState('');
     const [tasks, setTasks] = useState([]);
@@ -67,7 +68,9 @@ function App() {
     }
 
     function handleDeleteTask(id) {
-        setTasks(tasks.filter(task => task.id !== id))
+        const newTasks = tasks.filter(task => task.id !== id);
+        setTasks(newTasks);
+        saveToLocalStorage('tds', newTasks)
     }
 
     return (
