@@ -1,3 +1,4 @@
+//https://todomvc.com/examples/react/dist/
 import './App.css';
 import { useEffect, useState } from "react";
 import { saveToLocalStorage, loadFromLocalStorage } from './utils/localStorage';
@@ -5,6 +6,9 @@ import uuidGen from './utils/uuid';
 import Headline from './components/Headline'
 import TaskInput from './components/TaskInput';
 import TaskList from './components/TaskList';
+import ItemsLength from './components/ItemsLength';
+import SelectionButtons from './components/SelectionButtons';
+import ClearButton from './components/ClearButton';
 
 
 
@@ -52,6 +56,10 @@ function App() {
         setTasks(tasks.filter(task => task.id !== id))
     }
 
+    function handleDeleteDone() {
+    setTasks(tasks.filter(task => !task.status))
+    }
+
     return (
         <div className="App">
             <Headline />
@@ -60,17 +68,19 @@ function App() {
             handleChange={handleChange}
             handleKeyUp={handleKeyUp}
             />
+            {tasks.length === 0 ? ('') : (
+            <>
             <TaskList
             tasks={tasks}
             handleChangeStatus={handleChangeStatus}
             handleDeleteTask={handleDeleteTask}
             selection={selection}
             />
-            <div>
-                <button onClick={()=> setSelection('all')}>All</button>
-                <button onClick={()=> setSelection(false)}>Active</button>
-                <button onClick={()=> setSelection(true)}>Completed</button>
-            </div>
+            <ItemsLength tasks={tasks}/>
+            <SelectionButtons setSelection={setSelection}/>
+            <ClearButton tasks={tasks} handleDeleteDone={handleDeleteDone}/>
+            </>)
+            }
         </div>
     );
 }
