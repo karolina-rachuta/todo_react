@@ -5,12 +5,7 @@ import {
 } from "react";
 
 
-const uuidGen = () => Math.max(...loadFromLocalStorage('tds').map(e => e.id), 0)+1;
-
-
-// //trzeba zintancjonowac generator
-// const uuid = uuidGen()
-
+const uuidGen = () => Math.max(...loadFromLocalStorage('tds').map(e => e.id), 0) + 1;
 
 // nie w App bo te funckje by sie ciagle musialy renderowac
 const loadFromLocalStorage = (key) => {
@@ -35,24 +30,24 @@ function App() {
         setTasks(loadFromLocalStorage('tds'))
     }, []);
 
+// za kazdym razem jak sie stan taskow zmieni to trzeba zmienic local storage
+//za usunieciem, dodaniem i zmiena statusu
+    useEffect(() => {
+        saveToLocalStorage('tds', tasks)
+    }, [tasks])
+
     const handleChange = (event) => {
         setValue(event.target.value);
     }
 
     const handleKeyUp = (event) => {
         if (event.key === 'Enter') {
-            //gdybysmy nie uzyli zmiennej tylko wrzucili do setTasks
-            //cala tablice, to przy saveTomLocalStrage by sie dodawalo
-            //czesc rzeczy, bo setTasks jest asynchroniczne
-            //saveToLocalStorage- tez jest asynchroniczne
-            const newTask = [{
+            setTasks([{
                 name: value,
                 id: uuidGen(),
                 status: false
-            }, ...tasks];
-            setTasks(newTask);
+            }, ...tasks]);
             setValue('');
-            saveToLocalStorage('tds', newTask)
         }
     }
 
@@ -68,9 +63,7 @@ function App() {
     }
 
     function handleDeleteTask(id) {
-        const newTasks = tasks.filter(task => task.id !== id);
-        setTasks(newTasks);
-        saveToLocalStorage('tds', newTasks)
+        setTasks(tasks.filter(task => task.id !== id));
     }
 
     return (
