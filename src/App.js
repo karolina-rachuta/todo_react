@@ -1,34 +1,57 @@
 import './App.css';
-import {useState} from "react";
+import {
+    useEffect,
+    useState
+} from "react";
 
 
-function* uuidGen() {
-    let id = 0;
+const uuidGen = () => Math.max(...loadFromLocalStorage('tds').map(e => e.id), 0)+1;
 
-    while (true) {
-        yield id;
-        id++
+
+// //trzeba zintancjonowac generator
+// const uuid = uuidGen()
+
+
+// nie w App bo te funckje by sie ciagle musialy renderowac
+const loadFromLocalStorage = (key) => {
+    const data = localStorage.getItem(key);
+    if (data !== null) {
+        return JSON.parse(data);
     }
+    return []
 }
 
-//trzeba zintancjonowac generator
-const uuid = uuidGen()
+const saveToLocalStorage = (key, data) => {
+localStorage.setItem(key, JSON.stringify(data))
+}
 
 function App() {
     const [value, setValue] = useState('');
     const [tasks, setTasks] = useState([]);
+
+
+    useEffect(() => {
+        setTasks(loadFromLocalStorage('tds'))
+    }, []);
+
     const handleChange = (event) => {
         setValue(event.target.value);
     }
 
     const handleKeyUp = (event) => {
         if (event.key === 'Enter') {
-            setTasks([...tasks, {
+            //gdybysmy nie uzyli zmiennej tylko wrzucili do setTasks
+            //cala tablice, to przy saveTomLocalStrage by sie dodawalo
+            //czesc rzeczy, bo setTasks jest asynchroniczne
+            //saveToLocalStorage- tez jest asynchroniczne
+            const newTask = [{
                 name: value,
-                id: uuid.next().value,
+                id: uuidGen(),
                 status: false
-            }])
+            }, ...tasks];
+            setTasks(newTask);
             setValue('');
+            saveToLocalStorage('tds', newTask)
         }
     }
 
@@ -43,28 +66,28 @@ function App() {
         setTasks((newTasks));
     }
 
-    function handleDeleteTask (id) {
+    function handleDeleteTask(id) {
         setTasks(tasks.filter(task => task.id !== id))
     }
 
     return (
-        <div className="App">
-            <h1>todos</h1>
-            <input type="text" value={value} onChange={handleChange} onKeyUp={handleKeyUp}/>
-            <p>{value}</p>
-            <ul>
-                {tasks.map(({id, name, status}) => (
-                    <li key={id} className='todo-item'>
-                        <span className={status ? 'status done' : 'status active'}
-                              onClick={() => handleChangeStatus(id)}/>
-                        {name}
-                        <button onClick={() => handleDeleteTask(id)}>X</button>
-                    </li>
-                ))}
+        <div className = "App" >
+            <h1> todos </h1>
+            <input type = "text"
+            value = {value}
+            onChange = {handleChange}
+            onKeyUp = {handleKeyUp}/>
+            <p> {value} </p>
+            <ul> {tasks.map(({id,name,status}) => (
+                <li key = {id} className = 'todo-item' >
+                    <span className = {status ? 'status done' : 'status active'} onClick = {() => handleChangeStatus(id)}/>
+                    {name}
+                    <button onClick = {() => handleDeleteTask(id)} > X </button>
+                </li>
+            ))}
             </ul>
         </div>
-
-    );
+        );
 }
 
 export default App;
