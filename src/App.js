@@ -1,7 +1,7 @@
 //app based on: https://todomvc.com/examples/react/dist/
 import './App.css';
 import { useEffect, useState } from "react";
-import {collection, getDocs, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
+import {collection, getDocs, addDoc, updateDoc, doc, deleteDoc, writeBatch } from 'firebase/firestore';
 import { saveToLocalStorage, loadFromLocalStorage } from './utils/localStorage';
 import uuidGen from './utils/uuid';
 import Headline from './components/Headline'
@@ -66,10 +66,9 @@ function App() {
     async function handleChangeStatus(id) {
         const newTasks = tasks.filter(task => task.id === id)[0];
         newTasks.status = !newTasks.status
-        const {name, status} = newTasks;
 
-        await updateDoc(doc(db, 'todos', newTasks.id), {name, status});
-        
+        await updateDoc(doc(db, 'todos', id), {status: newTasks.status});
+
         setTasks([...tasks]);
     }
 
@@ -78,8 +77,18 @@ function App() {
         setTasks(tasks.filter(task => task.id !== id))
     }
 
-    function handleDeleteDone() {
+    async function handleDeleteDone() {
+        const batch = writeBatch(db);
+        tasks.forEach(task => {
+            if(task.status){
+                const ref = doc(db, 'todos', task.id);
+                batch.delete(ref);
+            }
+        })
+        await batch.commit();
+
         setTasks(tasks.filter(task => !task.status))
+
     }
 
     return (
