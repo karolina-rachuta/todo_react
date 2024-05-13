@@ -1,7 +1,7 @@
 //app based on: https://todomvc.com/examples/react/dist/
 import './App.css';
 import { useEffect, useState } from "react";
-import {collection, getDocs, addDoc, updateDoc} from 'firebase/firestore';
+import {collection, getDocs, addDoc, updateDoc, doc} from 'firebase/firestore';
 import { saveToLocalStorage, loadFromLocalStorage } from './utils/localStorage';
 import uuidGen from './utils/uuid';
 import Headline from './components/Headline'
@@ -63,15 +63,14 @@ function App() {
     }
 
 
-    function handleChangeStatus(id) {
-        const newTasks = tasks.map(task => {
-            if (task.id === id) {
-                task.status = !task.status
-            }
-            return task
-        })
+    async function handleChangeStatus(id) {
+        const newTasks = tasks.filter(task => task.id === id)[0];
+        newTasks.status = !newTasks.status
+        const {name, status} = newTasks;
 
-        setTasks(newTasks);
+        await updateDoc(doc(db, 'todos', newTasks.id), {name, status});
+        
+        setTasks([...tasks]);
     }
 
     function handleDeleteTask(id) {
