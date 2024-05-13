@@ -1,6 +1,7 @@
-//https://todomvc.com/examples/react/dist/
+//app based on: https://todomvc.com/examples/react/dist/
 import './App.css';
 import { useEffect, useState } from "react";
+import {collection, getDocs} from 'firebase/firestore';
 import { saveToLocalStorage, loadFromLocalStorage } from './utils/localStorage';
 import uuidGen from './utils/uuid';
 import Headline from './components/Headline'
@@ -9,6 +10,7 @@ import TaskList from './components/TaskList';
 import ItemsLength from './components/ItemsLength';
 import SelectionButtons from './components/SelectionButtons';
 import ClearButton from './components/ClearButton';
+import firebase, { db } from './firebase';
 
 
 
@@ -16,6 +18,20 @@ function App() {
     const [value, setValue] = useState('');
     const [tasks, setTasks] = useState([]);
     const [selection, setSelection] = useState('all');
+
+    //pobieramy dane i wyswitelamy z dane z naszej bazy danych:
+    const getData = async () => {
+        const querySnapshot = await getDocs(collection(db, "todos"));
+        setTasks(querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data()
+            })))
+    }
+
+    //pobieramy dane z db:  
+    useEffect(() => {
+       getData()
+    }, []);
 
     useEffect(() => {
         setTasks(loadFromLocalStorage('tds'));

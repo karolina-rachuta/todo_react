@@ -5,7 +5,8 @@ function TaskItem({id, status, name, handleChangeStatus, handleDeleteTask}) {
                 className={status ? 'status done' : 'status active'}
                 onClick={() => handleChangeStatus(id)}
             />
-            <span contentEditable='true'>{name}</span>
+            {/* <span contentEditable='true'>{name}</span> */}
+            <span>{name}</span>
             <button onClick={() => handleDeleteTask(id)}>x</button>
         </li>
     )
