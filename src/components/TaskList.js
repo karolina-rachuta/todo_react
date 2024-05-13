@@ -1,5 +1,6 @@
 import TaskItem from "./TaskItem"
-function TaskList ({tasks, handleChangeStatus, handleDeleteTask, selection}) {
+function TaskList ({tasks, selection}) {
+   
     return (
         <ul>
             {tasks.filter(e => selection === 'all' || e.status === selection).map(({id, name, status}) => (
@@ -8,8 +9,6 @@ function TaskList ({tasks, handleChangeStatus, handleDeleteTask, selection}) {
                     id={id}
                     name={name}
                     status={status}
-                    handleChangeStatus={handleChangeStatus}
-                    handleDeleteTask={handleDeleteTask}
                 />
                 ))}
         </ul>
