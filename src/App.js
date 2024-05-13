@@ -1,7 +1,7 @@
 //app based on: https://todomvc.com/examples/react/dist/
 import './App.css';
 import { useEffect, useState } from "react";
-import {collection, getDocs} from 'firebase/firestore';
+import {collection, getDocs, addDoc, updateDoc} from 'firebase/firestore';
 import { saveToLocalStorage, loadFromLocalStorage } from './utils/localStorage';
 import uuidGen from './utils/uuid';
 import Headline from './components/Headline'
@@ -45,13 +45,19 @@ function App() {
         setValue(event.target.value);
     }
 
-    const handleKeyUp = (event) => {
+    //zapisywanie danych w db, ktore wpisze uzytkownik
+    const handleKeyUp = async (event) => {
         if (event.key === 'Enter') {
-            setTasks([{
+
+            const newTodo = {
                 name: value,
-                id: uuidGen(),
                 status: false
-            }, ...tasks]);
+            };
+            const docRef = await addDoc(collection(db, "todos"), newTodo)
+            
+            setTasks([Object.assign(newTodo, {
+                id: docRef.id
+            }), ...tasks]);
             setValue('');
         }
     }
