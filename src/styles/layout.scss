@@ -1,0 +1,7 @@
+@import "variables";
+@import "utils";
+
+html, body {
+   background-color: $bg-color;
+   font-size: torem($base-font-size);
+}

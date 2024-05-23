@@ -33,6 +33,7 @@ function App() {
     return (
         <div className="App">
             <Headline />
+            <div className='container'>
             <TaskInput/>
             {tasks.length === 0 ? ('') : (
             <>
@@ -45,6 +46,7 @@ function App() {
             <ClearButton tasks={tasks}/>
             </>)
             }
+            </div>
         </div>
     );
 }

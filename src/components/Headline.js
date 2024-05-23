@@ -1,6 +1,6 @@
  function Headline() {
     return (
-        <h1> todos </h1>
+        <h1 className="hdl"> todos </h1>
     )
 }
 
