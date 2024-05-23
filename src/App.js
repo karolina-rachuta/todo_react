@@ -41,11 +41,16 @@ function App() {
             tasks={tasks}
             selection={selection}
             />
-            <ItemsLength tasks={tasks}/>
-            <SelectionButtons setSelection={setSelection}/>
-            <ClearButton tasks={tasks}/>
+            <div className='utils'>
+                <ItemsLength tasks={tasks}/>
+                <SelectionButtons setSelection={setSelection} selection={selection}/>
+                <div>
+                    <ClearButton tasks={tasks}/>
+                </div>
+            </div>
             </>)
             }
+            
             </div>
         </div>
     );
