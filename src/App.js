@@ -1,5 +1,5 @@
 //app based on: https://todomvc.com/examples/react/dist/
-import './App.css';
+import './App.scss';
 import { useEffect, useState } from "react";
 import {collection, onSnapshot } from 'firebase/firestore';
 import Headline from './components/Headline'
@@ -13,7 +13,6 @@ import { db } from './firebase';
 
 
 function App() {
-    const [value, setValue] = useState('');
     const [tasks, setTasks] = useState([]);
     const [selection, setSelection] = useState('all');
 
@@ -30,14 +29,11 @@ function App() {
        }
     }, []);
 
-    
+
     return (
         <div className="App">
             <Headline />
-            <TaskInput
-            val={value}
-            setValue={setValue}
-            />
+            <TaskInput/>
             {tasks.length === 0 ? ('') : (
             <>
             <TaskList
