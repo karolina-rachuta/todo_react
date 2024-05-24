@@ -1,4 +1,3 @@
-//app based on: https://todomvc.com/examples/react/dist/
 import './App.scss';
 import { useEffect, useState } from "react";
 import {collection, onSnapshot } from 'firebase/firestore';
@@ -16,7 +15,6 @@ function App() {
     const [tasks, setTasks] = useState([]);
     const [selection, setSelection] = useState('all');
 
-    //pobieramy dane z db i wyswitelamy z dane z naszej bazy danych oraz updatujemy automatyznie stan 
     useEffect(() => {
        const unsubscribe = onSnapshot(collection(db, 'todos'), (snapshot) => {
         setTasks(snapshot.docs.map((doc) => ({
@@ -34,23 +32,22 @@ function App() {
         <div className="App">
             <Headline />
             <div className='container'>
-            <TaskInput/>
-            {tasks.length === 0 ? ('') : (
-            <>
-            <TaskList
-            tasks={tasks}
-            selection={selection}
-            />
-            <div className='utils'>
-                <ItemsLength tasks={tasks}/>
-                <SelectionButtons setSelection={setSelection} selection={selection}/>
-                <div>
-                    <ClearButton tasks={tasks}/>
+                <TaskInput/>
+                {tasks.length === 0 ? ('') : (
+                <>
+                <TaskList
+                tasks={tasks}
+                selection={selection}
+                />
+                <div className='utils'>
+                    <ItemsLength tasks={tasks}/>
+                    <SelectionButtons setSelection={setSelection} selection={selection}/>
+                    <div>
+                        <ClearButton tasks={tasks}/>
+                    </div>
                 </div>
-            </div>
-            </>)
-            }
-            
+                </>)
+                }
             </div>
         </div>
     );

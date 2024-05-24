@@ -3,7 +3,6 @@ import { db } from "../firebase"
 
 function TaskItem({id, status, name}) {
 
-    //id wziety globalnie wiec mozna wyrzucic jako parametr funkcji
     async function handleDeleteTask() {
         await deleteDoc(doc(db, 'todos', id));
     }
@@ -17,7 +16,6 @@ function TaskItem({id, status, name}) {
                 className={status ? 'status done' : 'status active'}
                 onClick={handleChangeStatus}
             />
-            {/* <span contentEditable='true'>{name}</span> */}
             <span>{name}</span>
             <button onClick={handleDeleteTask}>x</button>
         </li>

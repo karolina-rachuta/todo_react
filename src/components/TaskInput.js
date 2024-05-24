@@ -10,7 +10,6 @@ function TaskInput () {
         setValue(event.target.value);
     }
 
-    //zapisywanie danych w db, ktore wpisze uzytkownik
     const handleKeyUp = async (event) => {
         if (event.key === 'Enter') {
 
