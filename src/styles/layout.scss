@@ -3,6 +3,6 @@
 
 html, body {
    background-color: $bg-color;
-   font-size: torem($base-font-size);
+   font-size: toRem($base-font-size);
    padding-inline: toRem(16);
 }
